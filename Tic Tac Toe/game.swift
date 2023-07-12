@@ -15,7 +15,6 @@ var gameBoard = [Int]()
 // 1: X
 // 2: O
 
-
 func getBoardCell (_ cell: Int) -> String?{
     
     switch cell {
@@ -38,12 +37,13 @@ func initGameBoard(arr: inout [Int]){
 }
 
 
-func displayBoard(arr:[Int]) {
+func displayBoard(arr:[Int], curPlayer: Int) {
+    print("Current Player: \(curPlayer), place \(getBoardCell(curPlayer)!)")
     print(boardDashPrint)
     
     for i in 0..<3{
         for j in 0..<3{
-            let cell: String = getBoardCell(arr[i * 3 + j]) ?? String(i * 3 + j)
+            let cell: String = getBoardCell(arr[i * 3 + j]) ?? String(i * 3 + j + 1)
                 
             print(" \(cell) ", terminator: "")
            
@@ -56,7 +56,22 @@ func displayBoard(arr:[Int]) {
 }
 
 func getPlayerInput(curPlayer: Int){
-    print("Please input from 0-8: ", terminator: "")
-    let input: String = readLine()!
-    gameBoard[Int(input)!] = curPlayer
+    print("Please input from 1-9: ", terminator: "")
+    var input: Int = Int(readLine()!)!
+    while(!isValid(input: input)){
+         input = Int(readLine()!)!
+    }
+    gameBoard[input-1] = curPlayer
+    print()
+}
+
+func isValid(input: Int) -> Bool{
+    if input < 1 || input > 9{
+        print("Out of Range. Input again: ", terminator: "")
+        return false
+    } else if gameBoard[input-1] != 0{
+        print("Place occupied. Input again: ", terminator: "")
+        return false
+    }
+    return true
 }
