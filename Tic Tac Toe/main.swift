@@ -8,19 +8,24 @@
 
 import Foundation
 
-initGameBoard(arr: &gameBoard)
-
+var gameBoard = [Int]()
 var playerWin = false
 var numRounds = 1
 var curPlayer = 1
 
+initGameBoard(gameBoard: &gameBoard)
+
 while(!playerWin){
-    displayBoard(arr: gameBoard, curPlayer: curPlayer)
-    if numRounds > 9 {
+    getPlayerInput(curPlayer: curPlayer)
+    displayBoard(gameBoard: gameBoard)
+    if checkIfDraw(numRounds: numRounds) {
         print("This is a Draw!")
         break
     }
-    getPlayerInput(curPlayer: curPlayer)
+    if checkIfWin(curPlayer: curPlayer, gameBoard: gameBoard) {
+        print("Player \(curPlayer) Win!")
+        break
+    }
     curPlayer = numRounds % 2 + 1
     numRounds += 1
 }

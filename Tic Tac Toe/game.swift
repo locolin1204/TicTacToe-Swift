@@ -9,14 +9,12 @@
 import Foundation
 
 let boardDashPrint = ("-----------")
-var gameBoard = [Int]()
 
 // 0: Empty
 // 1: X
 // 2: O
 
 func getBoardCell (_ cell: Int) -> String?{
-    
     switch cell {
     case 0:
         return nil
@@ -29,21 +27,19 @@ func getBoardCell (_ cell: Int) -> String?{
     }
 }
 
-
-func initGameBoard(arr: inout [Int]){
+func initGameBoard(gameBoard: inout [Int]){
     for _ in 0..<9{
-        arr.append(0)
+        gameBoard.append(0)
     }
+    displayBoard(gameBoard: gameBoard)
 }
 
 
-func displayBoard(arr:[Int], curPlayer: Int) {
-    print("Current Player: \(curPlayer), place \(getBoardCell(curPlayer)!)")
+func displayBoard(gameBoard:[Int]) {
     print(boardDashPrint)
-    
     for i in 0..<3{
         for j in 0..<3{
-            let cell: String = getBoardCell(arr[i * 3 + j]) ?? String(i * 3 + j + 1)
+            let cell: String = getBoardCell(gameBoard[i * 3 + j]) ?? String(i * 3 + j + 1)
                 
             print(" \(cell) ", terminator: "")
            
@@ -56,6 +52,7 @@ func displayBoard(arr:[Int], curPlayer: Int) {
 }
 
 func getPlayerInput(curPlayer: Int){
+    print("Current: Player \(curPlayer), place \(getBoardCell(curPlayer)!)")
     print("Please input from 1-9: ", terminator: "")
     var input: Int = Int(readLine()!)!
     while(!isValid(input: input)){
@@ -74,4 +71,35 @@ func isValid(input: Int) -> Bool{
         return false
     }
     return true
+}
+
+func checkIfDraw(numRounds: Int) -> Bool{
+    if numRounds > 9 {
+        return true
+    }
+    return false
+}
+
+func checkIfWin(curPlayer: Int, gameBoard: [Int]) -> Bool {
+    // check horizontal
+    for i in 0...2 {
+        if gameBoard[i] == gameBoard[i+1] && gameBoard[i] == gameBoard[i+2] && gameBoard[i] == curPlayer {
+            return true
+        }
+    }
+    // check vertical
+    for i in 0...2 {
+        if gameBoard[i] == gameBoard[i+3] && gameBoard[i] == gameBoard[i+6] && gameBoard[i] == curPlayer {
+            return true
+        }
+    }
+    // check slant
+    if gameBoard[0] == gameBoard[4] && gameBoard[0] == gameBoard[8] && gameBoard[4] == curPlayer {
+        return true
+    }
+    if gameBoard[2] == gameBoard[4] && gameBoard[2] == gameBoard[6] && gameBoard[4] == curPlayer {
+        return true
+    }
+    
+    return false
 }
